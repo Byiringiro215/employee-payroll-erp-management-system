@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rwanda ERP – ERD Diagram</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 32px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      color: #38bdf8;
+      letter-spacing: 1px;
+    }
+    p.sub {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+    .mermaid {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Rwanda Government ERP — Entity Relationship Diagram</h1>
+  <p class="sub">PostgreSQL · 6 Tables · Managed by Hibernate / Spring Data JPA</p>
+
+  <div class="mermaid">
+erDiagram
+    USERS {
+        BIGINT id PK
+        VARCHAR username UK
+        VARCHAR email UK
+        VARCHAR password
+        VARCHAR role
+    }
+
+    EMPLOYEES {
+        BIGINT id PK
+        VARCHAR first_name
+        VARCHAR last_name
+        VARCHAR email UK
+        VARCHAR district
+        VARCHAR mobile
+        DATE date_of_birth
+        DOUBLE base_salary
+        VARCHAR status
+        BIGINT user_id FK
+    }
+
+    EMPLOYMENTS {
+        BIGINT id PK
+        VARCHAR employee_code UK
+        VARCHAR department
+        VARCHAR position
+        VARCHAR institution
+        DOUBLE base_salary
+        VARCHAR status
+        DATE joining_date
+        BIGINT employee_id FK
+    }
+
+    DEDUCTIONS {
+        BIGINT id PK
+        VARCHAR deduction_name UK
+        DOUBLE percentage
+    }
+
+    PAYSLIPS {
+        BIGINT id PK
+        BIGINT employee_id FK
+        INTEGER month
+        INTEGER year
+        DOUBLE base_salary
+        DOUBLE house_amount
+        DOUBLE transport_amount
+        DOUBLE gross_salary
+        DOUBLE employee_tax
+        DOUBLE pension
+        DOUBLE medical_insurance
+        DOUBLE others
+        DOUBLE net_salary
+        VARCHAR status
+    }
+
+    MESSAGES {
+        BIGINT id PK
+        BIGINT employee_id FK
+        VARCHAR text
+        INTEGER month
+        INTEGER year
+        TIMESTAMP date_time
+    }
+
+    USERS ||--o| EMPLOYEES : "has account (optional)"
+    EMPLOYEES ||--|| EMPLOYMENTS : "has employment (1-to-1)"
+    EMPLOYEES ||--o{ PAYSLIPS : "has payslips (1-to-many)"
+    EMPLOYEES ||--o{ MESSAGES : "receives messages (1-to-many)"
+  </div>
+
+</body>
+</html>
